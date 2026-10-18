@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>讀書計畫｜段考、學測</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f3f6f5;--page:#fbfcfb;--ink:#1d2b53;--sub:#6a7491;--line:#cdd5e6;--grid:rgba(70,100,170,.09);--red:#d2362f;color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--paper:#12161d;--page:#171c25;--ink:#dbe3f5;--sub:#8e9ab6;--line:#2c3547;--grid:rgba(140,170,230,.07);--red:#ff6b61}}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;font:16px/1.75 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+main{max-width:660px;margin:0 auto;padding:34px 16px 60px}
+h1,h2,.tab,.n{font-family:"LXGW WenKai TC","Kaiti TC","DFKai-SB",serif}
+h1{font-size:30px;margin:0}
+h2{font-size:21px;margin:0 0 6px}
+.slogan{margin:2px 0 0;color:var(--sub);font-size:15px}
+.tabs{display:flex;gap:6px;margin-top:20px;position:relative;z-index:1}
+.tab{font-size:16px;padding:7px 18px 5px;border:1.5px solid var(--ink);border-bottom:0;border-radius:8px 8px 0 0;background:transparent;color:var(--sub);cursor:pointer}
+.tab.on{background:var(--page);color:var(--ink);font-weight:700;padding-bottom:9px;margin-bottom:-1.5px}
+.sheet{border:1.5px solid var(--ink);background:var(--page);padding:26px 24px 30px;min-height:300px}
+button{font:inherit;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:4px;padding:5px 15px;cursor:pointer}
+button:hover{background:var(--line)}
+button.main{background:var(--ink);color:var(--page)}
+button.link{border:0;text-decoration:underline;color:var(--sub);padding:5px 6px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+input,select{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1.5px solid var(--ink);border-radius:0;padding:3px 2px;min-width:0}
+select option{background:var(--page)}
+.head{display:flex;justify-content:space-between;align-items:baseline}
+.no{color:var(--sub);font-size:14px}
+.hint{color:var(--sub);font-size:14px;margin:4px 0 14px}
+.err{color:var(--red);min-height:1.7em;margin:10px 0 0}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.f{display:flex;flex-direction:column;font-size:13px;color:var(--sub);gap:1px;margin:0 0 14px}
+.f input,.f select{font-size:16px}
+.sub{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:flex-end;padding-top:12px;border-bottom:1px dashed var(--line);margin-bottom:6px}
+.sub .f{margin-bottom:10px}
+.w2{flex:1 1 130px}.s{width:76px}
+.x{margin-bottom:10px;border-color:var(--line);color:var(--sub);padding:2px 10px}
+.count{font-size:20px;margin:0;font-family:"LXGW WenKai TC","Kaiti TC",serif}
+.n{position:relative;display:inline-block;font-size:2.3em;font-weight:700;padding:0 .32em;line-height:1.3;margin:0 .05em}
+.n::before{content:"";position:absolute;inset:.02em -.08em;border:2.5px solid var(--red);border-radius:52% 48% 55% 45%/48% 56% 44% 52%;transform:rotate(-4deg)}
+.msg{color:var(--sub);margin:4px 0 22px}
+.day{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tag{color:var(--sub);font-size:14px;margin:0}
+.task{position:relative;display:flex;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.task input{position:absolute;opacity:0}
+.box{flex:none;width:18px;height:18px;border:1.5px solid var(--ink);position:relative;top:3px}
+.task input:checked+.box::after{content:"×";position:absolute;left:0;right:0;top:-6px;text-align:center;font-size:24px;line-height:24px}
+.task input:focus-visible+.box{outline:2px solid var(--red);outline-offset:2px}
+.task.on .tname{color:var(--sub);text-decoration:line-through}
+.tinfo{margin-left:auto;color:var(--sub);font-size:14px;text-align:right}
+.small{color:var(--sub);font-size:14px;margin:8px 0}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.acts button{font-size:14px;padding:3px 12px}
+h3{font-family:"LXGW WenKai TC","Kaiti TC",serif;font-size:17px;margin:30px 0 6px}
+.pg{display:flex;align-items:center;gap:12px;font-size:15px;padding:3px 0}
+.pg b{width:3.2em;font-weight:400}
+.bar{flex:1;height:5px;background:var(--line)}
+.bar i{display:block;height:100%;background:var(--ink)}
+.pg span{color:var(--sub);font-size:14px;min-width:5.5em;text-align:right}
+.row{display:flex;gap:14px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.row .d{flex:none;width:86px;color:var(--sub)}
+.row small{display:block;color:var(--sub);font-size:13px;line-height:1.5}
+.foot{margin-top:26px;display:flex;gap:6px;flex-wrap:wrap}
+.tiny{color:var(--sub);font-size:13px;margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+  <h1>讀書計畫</h1>
+  <p class="slogan">從今天開始排，過去的不追。</p>
+  <div class="tabs">
+    <button class="tab" id="tab0" onclick="setMode(0)">段考／模擬考</button>
+    <button class="tab" id="tab1" onclick="setMode(1)">學測</button>
+  </div>
+  <div class="sheet" id="view"></div>
+  <p class="tiny">資料只存在這台裝置的瀏覽器裡，不會傳到任何地方。兩個模式的設定是分開存的。</p>
+</main>
+
+<script>
+var KEY = "studyplan_v3";
+var weekName = ["日","一","二","三","四","五","六"];
+var levelName = ["不熟","偏弱","普通","還行","很穩"];
+var data;
+
+// ---------- 日期的小工具 ----------
+function pad(n) { return n < 10 ? "0" + n : "" + n; }
+function toStr(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function toDate(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2], 12); }   // 設中午，比較不會被時區害到
+function addDay(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+function diff(a, b) { return Math.round((b - a) / 86400000); }   // b 比 a 晚幾天
+function shortDate(d) { return (d.getMonth() + 1) + "/" + d.getDate(); }
+function has(arr, s) { return arr.indexOf(s) != -1; }
+function toggle(arr, s) { var i = arr.indexOf(s); if (i == -1) arr.push(s); else arr.splice(i, 1); }
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+function $(id) { return document.getElementById(id); }
+
+// ---------- 資料 ----------
+function newMode(m) {
+  var names = ["國文", "英文", "數學", "自然", "社會"], lv = [3, 3, 2, 3, 3], subs = [];
+  for (var i = 0; i < 5; i++) subs.push({ name: names[i], level: lv[i], unit: "章", goal: 0, done: 0, base: 0 });
+  return { name: "段考", date: "", perDay: m == 0 ? 4 : 5, rest: m == 0 ? -1 : 0, ready: false, subs: subs };
+}
+
+function load() {
+  try { data = JSON.parse(localStorage.getItem(KEY)); } catch (e) { data = null; }
+  if (!data || !data.modes) data = { mode: 0, step: 1, modes: [newMode(0), newMode(1)], off: [], light: [], ticks: [], baseDate: "" };
+  data.today = toStr(new Date());   // 今天預設用電腦的日期
+  data.step = data.modes[data.mode].ready ? 0 : 1;
+  refreshBase();
+}
+
+function save() { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {} }
+
+// 每天第一次打開，把今天的起點進度記下來，打勾之後今天的任務才不會跑掉
+function refreshBase() {
+  if (data.baseDate == data.today) return;
+  for (var m = 0; m < 2; m++) {
+    for (var i = 0; i < data.modes[m].subs.length; i++) data.modes[m].subs[i].base = data.modes[m].subs[i].done;
+  }
+  data.baseDate = data.today;
+}
+
+// ---------- 排計畫 (最難的地方) ----------
+// 越不熟、剩越多、越接近考試，分到的節數越多
+// 每天每科累積「額度」，一節給額度最高的那科，這樣弱科多但強科也會輪到
+function makePlan() {
+  var M = data.modes[data.mode], subs = M.subs, days = [];
+  if (M.date == "" || !data.today) return days;
+  var today = toDate(data.today);
+  var total = diff(today, toDate(M.date));   // 離考試幾天 (考試當天不念)
+  if (total <= 0) return days;
+
+  var avg = 0, cnt = 0, i, k, b;
+  for (i = 0; i < subs.length; i++) {
+    if (subs[i].goal > 0) { avg += Math.max(0, subs[i].goal - subs[i].base); cnt++; }
+  }
+  if (cnt > 0) avg = avg / cnt;
+  var credit = [];
+  for (i = 0; i < subs.length; i++) credit.push(0);
+
+  for (i = 0; i < total; i++) {
+    var t = addDay(today, i), ds = toStr(t);
+    var d = { date: ds, t: t, items: [], rest: false, light: has(data.light, ds), note: "" };
+    d.rest = ((data.mode == 1 && t.getDay() == M.rest) != has(data.off, ds));   // 固定休息日 + 手動切換
+    var left = total - i;
+    var n = M.perDay;
+    if (d.light) n = Math.ceil(n / 2);   // 狀態不好只做一半
+
+    if (!d.rest) {
+      var w = [], sum = 0;
+      for (k = 0; k < subs.length; k++) {
+        var x = 6 - subs[k].level;
+        if (avg > 0 && subs[k].goal > 0) x *= Math.min(2, Math.max(0.5, Math.max(0, subs[k].goal - subs[k].base) / avg));
+        if (left == 1) x *= 2.5; else if (left <= 3) x *= 1.5;
+        w.push(x); sum += x;
+      }
+      var got = [];
+      for (k = 0; k < subs.length; k++) { credit[k] += n * w[k] / sum; got.push(0); }
+      for (b = 0; b < n; b++) {
+        var best = 0;
+        for (k = 1; k < subs.length; k++) if (credit[k] > credit[best]) best = k;
+        credit[best]--; got[best]++;
+      }
+      for (k = 0; k < subs.length; k++) {
+        if (got[k] > 0) d.items.push({ id: k, name: subs[k].name, blocks: got[k], from: -1, to: -1 });
+      }
+    }
+    if (left == 1) d.note = "明天就考了，今天以複習為主，證件和文具先準備好，早點睡。";
+    days.push(d);
+  }
+
+  // 把預計進度分到每一天：前 80% 的節數念新的，最後 20% 留給複習
+  var totalB = [], cum = [], di;
+  for (i = 0; i < subs.length; i++) { totalB.push(0); cum.push(0); }
+  for (di = 0; di < days.length; di++) for (k = 0; k < days[di].items.length; k++) totalB[days[di].items[k].id] += days[di].items[k].blocks;
+  for (di = 0; di < days.length; di++) {
+    for (k = 0; k < days[di].items.length; k++) {
+      var it = days[di].items[k], s = subs[it.id];
+      if (s.goal > 0) {
+        var remain = Math.max(0, s.goal - s.base);
+        var newB = Math.max(1, Math.floor(totalB[it.id] * 0.8));
+        var c1 = Math.min(cum[it.id], newB), c2 = Math.min(cum[it.id] + it.blocks, newB);
+        var u1 = Math.round(remain * c1 / newB), u2 = Math.round(remain * c2 / newB);
+        if (u2 > u1) { it.from = s.base + u1 + 1; it.to = s.base + u2; }
+        else { it.from = 0; it.to = 0; }
+        cum[it.id] += it.blocks;
+      }
+    }
+  }
+  return days;
+}
+
+// ---------- 文字 ----------
+function getMsg(n) {
+  if (n > 60) return "時間還夠，現在最重要的是養成固定的節奏。";
+  if (n > 30) return "進入中段了。做完今天的就好，不用追趕昨天。";
+  if (n > 7) return "開始收斂了，錯題本比新題目更值得花時間。";
+  if (n > 1) return "最後幾天，睡眠比多念一小時更重要。";
+  return "最後一天，複習完就去休息。";
+}
+function getTip(p) {
+  if (p == "基礎補強") return "先補弱科的基本觀念，不急著刷題。";
+  if (p == "題型整合") return "開始做整回考古題，錯的題目寫進錯題本。";
+  return "照正式考試時間作答，把作息調成考試時段。";
+}
+function unitText(it, s) {
+  if (it.from == -1) return "";
+  if (it.from == 0) return "複習、整理錯題";
+  if (it.from == it.to) return "第 " + it.from + " " + s.unit;
+  return "第 " + it.from + "~" + it.to + " " + s.unit;
+}
+function dayText(d, subs) {
+  if (d.rest) return "休息";
+  var a = [];
+  for (var k = 0; k < d.items.length; k++) {
+    var it = d.items[k], u = unitText(it, subs[it.id]);
+    a.push(it.name + "×" + it.blocks + (u ? "（" + u + "）" : ""));
+  }
+  return a.join("　");
+}
+
+// ---------- 畫面 ----------
+function render() {
+  var M = data.modes[data.mode];
+  $("tab0").className = "tab" + (data.mode == 0 ? " on" : "");
+  $("tab1").className = "tab" + (data.mode == 1 ? " on" : "");
+  if (data.step == 0 && !M.ready) data.step = 2;
+  if (data.step == 0) showPlan(); else showStep();
+  save();
+}
+
+function setMode(m) {
+  readStep();
+  data.mode = m;
+  data.step = data.modes[m].ready ? 0 : 2;   // 新的模式從考試日期開始問，今天日期已經有了
+  render();
+}
+
+function levelOptions(sel) {
+  var h = "";
+  for (var i = 0; i < 5; i++) h += '<option value="' + (i + 1) + '"' + (sel == i + 1 ? " selected" : "") + ">" + levelName[i] + "</option>";
+  return h;
+}
+
+function showStep() {
+  var M = data.modes[data.mode], st = data.step, h = "", i;
+  if (st == 1) {
+    h += '<div class="head"><h2>今天是幾月幾號？</h2><span class="no">1 / 3</span></div>';
+    h += '<p class="hint">預設是這台電腦的日期，沒問題就直接按下一步。</p>';
+    h += '<input type="date" id="today" value="' + data.today + '">';
+  } else if (st == 2) {
+    h += '<div class="head"><h2>下次' + (data.mode == 0 ? "段考或模擬考" : "學測") + "是哪天？</h2>" + '<span class="no">2 / 3</span></div>';
+    h += '<p class="hint">考好幾天的話，填第一天就好。</p>';
+    if (data.mode == 0) h += '<label class="f">這次考試叫什麼<input id="ename" value="' + esc(M.name) + '" placeholder="例如 第二次段考"></label>';
+    h += '<label class="f">考試日期<input type="date" id="edate" value="' + M.date + '" onchange="showLeft()"></label>';
+    h += '<p class="hint" id="left"></p>';
+    h += '<label class="f">每天大概能讀幾節 (一節約一小時)<select id="perday">';
+    for (i = 1; i <= 8; i++) h += '<option value="' + i + '"' + (M.perDay == i ? " selected" : "") + ">" + i + " 節</option>";
+    h += "</select></label>";
+    if (data.mode == 1) {
+      h += '<label class="f">每週固定休息<select id="rest"><option value="-1"' + (M.rest == -1 ? " selected" : "") + '>不固定</option>';
+      h += '<option value="0"' + (M.rest == 0 ? " selected" : "") + '>週日</option><option value="6"' + (M.rest == 6 ? " selected" : "") + ">週六</option></select></label>";
+    }
+  } else {
+    h += '<div class="head"><h2>各科的熟悉程度和進度</h2><span class="no">3 / 3</span></div>';
+    h += '<p class="hint">熟悉程度照感覺選就好。不確定進度的話，「預計念完」填 0，就只會顯示每天幾節。</p>';
+    for (i = 0; i < M.subs.length; i++) {
+      var s = M.subs[i];
+      h += '<div class="sub"><label class="f w2">科目<input id="n' + i + '" value="' + esc(s.name) + '"></label>';
+      h += '<label class="f">熟悉程度<select id="l' + i + '">' + levelOptions(s.level) + "</select></label>";
+      h += '<label class="f s">預計念完<input type="number" min="0" max="999" id="g' + i + '" value="' + s.goal + '"></label>';
+      h += '<label class="f s">單位<input id="u' + i + '" value="' + esc(s.unit) + '"></label>';
+      h += '<label class="f s">已完成<input type="number" min="0" max="999" id="d' + i + '" value="' + s.done + '"></label>';
+      h += '<button class="x" onclick="delSub(' + i + ')">刪除</button></div>';
+    }
+    h += '<div class="acts"><button onclick="addSub()">新增科目</button></div>';
+  }
+  h += '<p class="err" id="err"></p><div class="nav">';
+  if (st > 1) h += '<button onclick="goBack()">上一步</button>';
+  h += '<button class="main" onclick="goNext()">' + (st == 3 ? "產生計畫" : "下一步") + "</button>";
+  if (M.ready) h += '<button class="link" onclick="data.step=0;render()">不改了，回到計畫</button>';
+  h += "</div>";
+  if (st > 1) h += '<p class="tiny" style="margin-top:14px">不在輸入框裡的時候，按鍵盤的 b 也可以回上一步。</p>';
+  $("view").innerHTML = h;
+  if (st == 2) showLeft();
+}
+
+function showLeft() {
+  var v = $("edate").value, p = $("left");
+  if (!v) { p.textContent = ""; return; }
+  var n = diff(toDate(data.today), toDate(v));
+  p.textContent = n > 0 ? "從今天算起還有 " + n + " 天" : "這天已經過了，或是就在今天";
+}
+
+// 把畫面上填的東西存回 data (換步驟、換模式前都要先做)
+function readStep() {
+  var M = data.modes[data.mode], i;
+  if (data.step == 1 && $("today")) {
+    if ($("today").value) data.today = $("today").value;
+  } else if (data.step == 2 && $("edate")) {
+    M.date = $("edate").value;
+    if (data.mode == 0) M.name = $("ename").value || "段考";
+    M.perDay = +$("perday").value;
+    if (data.mode == 1) M.rest = +$("rest").value;
+  } else if (data.step == 3 && $("n0")) {
+    for (i = 0; i < M.subs.length; i++) {
+      var s = M.subs[i];
+      s.name = $("n" + i).value;
+      s.level = +$("l" + i).value;
+      s.goal = Math.max(0, +$("g" + i).value || 0);
+      s.unit = $("u" + i).value || "章";
+      s.done = Math.max(0, +$("d" + i).value || 0);
+      if (s.goal > 0 && s.done > s.goal) s.done = s.goal;
+      s.base = s.done;   // 進度改了，起點也跟著改
+    }
+  }
+}
+
+function goNext() {
+  readStep();
+  var M = data.modes[data.mode], err = "", i;
+  if (data.step == 1) {
+    if (!data.today) err = "先選一個日期。";
+    else refreshBase();
+  } else if (data.step == 2) {
+    if (!M.date) err = "還沒填考試日期。";
+    else if (diff(toDate(data.today), toDate(M.date)) <= 0) err = "考試日期要在今天之後喔。";
+  } else {
+    var ok = [];
+    for (i = 0; i < M.subs.length; i++) if (M.subs[i].name.replace(/\s/g, "") != "") ok.push(M.subs[i]);
+    if (ok.length == 0) err = "至少要留一個科目。";
+    else { M.subs = ok; M.ready = true; }
+  }
+  if (err) { $("err").textContent = err; return; }
+  data.step = (data.step == 3) ? 0 : data.step + 1;
+  render();
+}
+
+function goBack() {
+  readStep();
+  if (data.step > 1) data.step--;
+  render();
+}
+
+function addSub() {
+  readStep();
+  var M = data.modes[data.mode];
+  if (M.subs.length >= 15) return;
+  M.subs.push({ name: "", level: 3, unit: "章", goal: 0, done: 0, base: 0 });
+  render();
+}
+
+function delSub(i) {
+  readStep();
+  var M = data.modes[data.mode];
+  if (M.subs.length <= 1) return;
+  M.subs.splice(i, 1);
+  render();
+}
+
+function showPlan() {
+  var M = data.modes[data.mode], subs = M.subs, days = makePlan(), h = "", i, k;
+  if (days.length == 0) {
+    $("view").innerHTML = "<h2>還沒有可以排的計畫</h2><p class=\"hint\">考試日期要在今天之後。</p><div class=\"nav\"><button class=\"main\" onclick=\"data.step=2;render()\">改考試日期</button></div>";
+    return;
+  }
+  var label = data.mode == 0 ? M.name : "學測";
+  h += '<p class="count">離' + esc(label) + '還剩<span class="n">' + days.length + "</span>天</p>";
+  h += '<p class="msg">' + getMsg(days.length) + "</p>";
+
+  // 今天
+  var t = days[0], doneCnt = 0;
+  h += '<div class="day"><h2>今天 ' + shortDate(t.t) + "（週" + weekName[t.t.getDay()] + "）</h2>";
+  if (t.light && !t.rest) h += '<p class="tag">狀態不好，只做一半</p>';
+  h += "</div>";
+  if (t.rest) {
+    h += "<p>今天休息，休息也是計畫的一部分。</p>";
+  } else {
+    for (k = 0; k < t.items.length; k++) {
+      var it = t.items[k], on = has(data.ticks, data.mode + "|" + t.date + "|" + it.name), u = unitText(it, subs[it.id]);
+      if (on) doneCnt++;
+      h += '<label class="task' + (on ? " on" : "") + '"><input type="checkbox"' + (on ? " checked" : "") + ' onchange="tick(' + k + ')"><span class="box"></span>';
+      h += '<span class="tname">' + esc(it.name) + '</span><span class="tinfo">' + it.blocks + " 節" + (u ? "<br>" + esc(u) : "") + "</span></label>";
+    }
+    h += '<p class="small">已完成 ' + doneCnt + " / " + t.items.length + "。一節是 50 分鐘專心加 10 分鐘休息。</p>";
+    if (t.items.length > 0 && doneCnt == t.items.length) h += "<p>今天的份都做完了，剩下的時間是你的。</p>";
+  }
+  if (t.note) h += "<p>" + t.note + "</p>";
+  h += '<div class="acts"><button onclick="dayToggle(0)">' + (t.rest ? "今天其實想念書" : "今天想休息") + "</button>";
+  h += '<button onclick="dayToggle(1)">' + (t.light ? "狀態變好了，恢復正常" : "今天狀態不好，只做一半") + "</button></div>";
+
+  // 進度
+  var any = false;
+  for (i = 0; i < subs.length; i++) if (subs[i].goal > 0) any = true;
+  if (any) {
+    h += "<h3>進度</h3>";
+    for (i = 0; i < subs.length; i++) {
+      if (subs[i].goal <= 0) continue;
+      var pct = Math.min(100, Math.round(subs[i].done * 100 / subs[i].goal));
+      h += '<div class="pg"><b>' + esc(subs[i].name) + '</b><div class="bar"><i style="width:' + pct + '%"></i></div><span>' + subs[i].done + "/" + subs[i].goal + " " + esc(subs[i].unit) + "</span></div>";
+    }
+  }
+
+  // 接下來
+  h += "<h3>接下來</h3>";
+  if (data.mode == 0) {
+    for (i = 1; i < days.length; i++) {
+      h += '<div class="row"><span class="d">' + shortDate(days[i].t) + "（" + weekName[days[i].t.getDay()] + "）</span><div>" + esc(dayText(days[i], subs));
+      if (days[i].note) h += "<small>" + days[i].note + "</small>";
+      h += "</div></div>";
+    }
+    if (days.length == 1) h += '<p class="small">今天就是最後一天了。</p>';
+  } else {
+    h += weekRows(days, subs);
+  }
+  h += '<div class="foot"><button onclick="data.step=1;render()">重新設定</button><button onclick="copyPlan()">複製成文字</button><button class="link" onclick="clearAll()">清除全部資料</button></div>';
+  $("view").innerHTML = h;
+}
+
+// 學測的計畫很長，所以七天合成一週
+function weekRows(days, subs) {
+  var h = "";
+  for (var s = 0; s < days.length; s += 7) {
+    var blocks = {}, order = [], i, k;
+    for (i = s; i < s + 7 && i < days.length; i++) {
+      for (k = 0; k < days[i].items.length; k++) {
+        var it = days[i].items[k];
+        if (blocks[it.id] === undefined) { blocks[it.id] = 0; order.push(it.id); }
+        blocks[it.id] += it.blocks;
+      }
+    }
+    var f = s / days.length, phase = f < 0.5 ? "基礎補強" : (f < 0.85 ? "題型整合" : "模擬衝刺");
+    var txt = [];
+    for (k = 0; k < order.length; k++) txt.push(esc(subs[order[k]].name) + "×" + blocks[order[k]]);
+    h += '<div class="row"><span class="d">第 ' + (s / 7 + 1) + " 週<br>" + shortDate(days[s].t) + " 起</span><div>" + phase + "<br>" + txt.join("　") + "<small>" + getTip(phase) + "</small></div></div>";
+  }
+  return h;
+}
+
+// ---------- 按鈕 ----------
+// 打勾就自動加進度，再按一次取消
+function tick(k) {
+  var M = data.modes[data.mode], t = makePlan()[0], it = t.items[k], s = M.subs[it.id];
+  var key = data.mode + "|" + t.date + "|" + it.name;
+  var units = it.from > 0 ? it.to - it.from + 1 : 0;
+  if (has(data.ticks, key)) {
+    toggle(data.ticks, key);
+    s.done = Math.max(0, s.done - units);
+  } else {
+    data.ticks.push(key);
+    s.done += units;
+    if (s.goal > 0 && s.done > s.goal) s.done = s.goal;
+  }
+  render();
+}
+
+function dayToggle(which) {
+  toggle(which == 0 ? data.off : data.light, data.today);
+  render();
+}
+
+function copyPlan() {
+  var M = data.modes[data.mode], days = makePlan();
+  var txt = "讀書計畫 (" + (data.mode == 0 ? M.name : "學測") + ")　製作日期 " + data.today + "\n";
+  for (var i = 0; i < days.length; i++) {
+    txt += shortDate(days[i].t) + "（" + weekName[days[i].t.getDay()] + "）　" + dayText(days[i], M.subs) + "\n";
+  }
+  try {
+    navigator.clipboard.writeText(txt);
+    alert("複製好了，可以貼到筆記或文件裡。");
+  } catch (e) {
+    prompt("把下面這段複製起來：", txt);
+  }
+}
+
+function clearAll() {
+  if (!confirm("確定要清除全部設定和進度嗎？清掉就回不來了。")) return;
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  load();
+  render();
+}
+
+// 不在輸入框裡的時候，按 b 回上一步
+document.addEventListener("keydown", function (e) {
+  var tag = e.target.tagName;
+  if ((e.key == "b" || e.key == "B") && data.step > 1 && tag != "INPUT" && tag != "SELECT" && tag != "TEXTAREA") goBack();
+});
+
+load();
+render();
+</script>
+</body>
+</html>
